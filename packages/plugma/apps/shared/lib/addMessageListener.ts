@@ -5,7 +5,6 @@ import { get } from 'svelte/store'
 // FIXME: Use of addMessageListener needs refactoring so that duplicate listeners are not added.
 export function addMessageListener(via: string, callback: (event: MessageEvent) => void) {
 	const socket = get(wsClientStore)
-	const isInsideIframe = window.self !== window.top
 
 	if (via === 'window') {
 		window.addEventListener('message', callback)

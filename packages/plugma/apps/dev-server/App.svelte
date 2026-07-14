@@ -16,13 +16,14 @@
 	import { overrideMessageEvent } from './lib/overrideMessageEvent'
 	import { reimplementFigmaListeners } from './lib/reimplementFigmaListeners'
 	import { interceptDragEnd } from './lib/interceptDragEnd'
+	import { isInsideFigma } from '../shared/lib/isInsideFigma'
 	import ServerStatus from '../shared/components/ServerStatus.svelte'
 
-	const isInsideIframe = window.self !== window.top
+	const insideFigma = isInsideFigma()
 
 	// Initialize connection state based on context
-	if (isInsideIframe) {
-		// If we're inside an iframe, we're running inside Figma, so we're connected
+	if (insideFigma) {
+		// If we're running inside Figma, the plugin is open, so we're connected
 		isFigmaConnected.set(true)
 	}
 
@@ -74,7 +75,7 @@
 	}
 
 	// In the browser context
-	if (!isInsideIframe) {
+	if (!insideFigma) {
 		const socket = initializeWsClient(getRoom(), window.runtimeData.port)
 
 		socket.on('connect', () => {
@@ -110,7 +111,7 @@
 	})
 </script>
 
-{#if !isInsideIframe}
+{#if !insideFigma}
 	{#if isServerActive}
 		<!-- FIXME: When websockets enabled via test command, this should enable?-->
 		{#if !isWebsocketsEnabled}

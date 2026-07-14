@@ -1,5 +1,6 @@
 import { get } from 'svelte/store'
 import { devServerIframe } from '../../shared/stores'
+import { FIGMA_BRIDGE_FRAME_NAME } from '../../shared/lib/isInsideFigma'
 
 /**
  * Redirects the iframe to a new URL.
@@ -173,6 +174,11 @@ async function redirectUsingSrc({ url, iframe }) {
 export async function redirectIframe(url: string, mode: 'href' | 'srcdoc' | 'blob' | 'data-uri') {
 	const iframe = document.getElementById('dev-server-ui') as HTMLIFrameElement
 	if (iframe) {
+		// Tag the browsing context so the loaded UI can reliably tell it's running
+		// inside Figma. Set before any src/srcdoc assignment so it's in place when the
+		// document loads; window.name then persists across the redirect below.
+		iframe.name = FIGMA_BRIDGE_FRAME_NAME
+
 		// Verify server connection in the background and reload once available
 		waitForServer(url)
 			.then(async () => {

@@ -1,4 +1,5 @@
 import { addMessageListener } from '../../shared/lib/addMessageListener'
+import { isInsideFigma } from '../../shared/lib/isInsideFigma'
 
 /**
  * When the UI is being previewed in the browser, the window.onmessage event needs to be overridden
@@ -6,9 +7,7 @@ import { addMessageListener } from '../../shared/lib/addMessageListener'
  */
 
 export function overrideMessageEvent() {
-	const isInsideIframe = window.self !== window.top
-
-	if (!isInsideIframe) {
+	if (!isInsideFigma()) {
 		let originalAddEventListener = window.addEventListener
 		let originalOnMessageHandler: any = null
 		let messageListeners: any[] = []

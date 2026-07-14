@@ -1,4 +1,5 @@
 import { postMessageVia } from '../../shared/lib/postMessageVia'
+import { isInsideFigma } from '../../shared/lib/isInsideFigma'
 
 /**
  * Requests Figma styles from the plugin host. This function is necessary because
@@ -9,7 +10,6 @@ import { postMessageVia } from '../../shared/lib/postMessageVia'
  */
 export function getFigmaStyles() {
 	console.log('fetchFigmaStyles')
-	const isInsideIframe = window.self !== window.top
 
 	let message = {
 		pluginMessage: {
@@ -18,7 +18,7 @@ export function getFigmaStyles() {
 		pluginId: '*',
 	}
 
-	if (!isInsideIframe) {
+	if (!isInsideFigma()) {
 		postMessageVia(['ws'], message)
 	} else {
 		postMessageVia(['iframe'], message)

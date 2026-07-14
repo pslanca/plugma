@@ -1,4 +1,5 @@
 import { addMessageListener } from '../../shared/lib/addMessageListener'
+import { isInsideFigma } from '../../shared/lib/isInsideFigma'
 
 const isLocalStorageAvailable = (() => {
 	try {
@@ -18,7 +19,6 @@ const isLocalStorageAvailable = (() => {
  */
 
 export function listenForFigmaStyles() {
-	const isInIframe = window.self !== window.top
 	const html = document.querySelector('html')
 	const handleMessage = (event: any) => {
 		const message = event.data.pluginMessage
@@ -49,7 +49,7 @@ export function listenForFigmaStyles() {
 		}
 	}
 
-	if (isInIframe) {
+	if (isInsideFigma()) {
 		addMessageListener('window', handleMessage)
 	} else {
 		addMessageListener('ws', handleMessage)

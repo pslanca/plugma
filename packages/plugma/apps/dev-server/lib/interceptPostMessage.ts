@@ -1,4 +1,5 @@
 import { postMessageVia } from '../../shared/lib/postMessageVia'
+import { isInsideFigma } from '../../shared/lib/isInsideFigma'
 
 /**
  * When the UI is being previewed in the browser, postMessage calls need to be forwarded to the websocket server
@@ -7,10 +8,8 @@ import { postMessageVia } from '../../shared/lib/postMessageVia'
  */
 
 export function interceptPostMessage() {
-	const isInsideIframe = window.self !== window.top
-
-	// Override postMessage if not inside iframe
-	if (!isInsideIframe) {
+	// Override postMessage when running as a browser preview (not inside Figma)
+	if (!isInsideFigma()) {
 		// Store the original postMessage function
 		const originalPostMessage = window.postMessage
 

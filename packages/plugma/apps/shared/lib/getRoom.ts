@@ -1,6 +1,8 @@
-export function getRoom() {
-	let isInsideIframe = window.self !== window.top;
-	let isInsideFigma = typeof figma !== "undefined";
+import { isInsideFigma } from './isInsideFigma'
 
-	return isInsideIframe || isInsideFigma ? "figma" : "browser";
+export function getRoom() {
+	// `typeof figma` covers the main-thread sandbox; isInsideFigma() covers the UI iframe.
+	const inFigmaMainSandbox = typeof figma !== "undefined";
+
+	return isInsideFigma() || inFigmaMainSandbox ? "figma" : "browser";
 }

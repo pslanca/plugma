@@ -1,4 +1,7 @@
-import type { Vite, VitestPluginContext } from 'vitest/node'
+import type { VitestPluginContext } from 'vitest/node'
+// Import Plugin from 'vitest/config' so its module augmentation of Vite's Plugin
+// interface (which adds the `configureVitest` hook) is in scope.
+import type { Plugin } from 'vitest/config'
 import { createClient } from '../core/websockets/client.js'
 
 console.log('[plugin] running plugin...')
@@ -22,7 +25,7 @@ console.log('[plugin] running plugin...')
 // 	})
 // })
 
-export default function initTestClient(): Vite.Plugin {
+export default function initTestClient(): Plugin {
 	return {
 		name: 'vitest-socket-plugin',
 
